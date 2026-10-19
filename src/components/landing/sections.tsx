@@ -12,6 +12,7 @@ import StarBorder from "@/components/reactbits/StarBorder";
 import { useReducedMotion } from "motion/react";
 import { useI18n } from "@/i18n/client";
 import { useMotionPref } from "./motion-pref";
+import { CrescentMoon, Lantern, MosqueSkyline, StarPattern, Stars } from "./ornaments";
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
@@ -266,7 +267,8 @@ export function Sources() {
   ];
   return (
     <section id="sources" className="scroll-mt-28 px-4 py-24 sm:px-6 md:py-32">
-      <div className="mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-sky-50 via-white to-sky-100 p-8 ring-1 ring-navy-950/5 md:p-14">
+      <div className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-sky-50 via-white to-sky-100 p-8 ring-1 ring-navy-950/5 md:p-14">
+        <StarPattern id="sources-pattern" className="-z-10" opacity={0.09} />
         <div className="grid gap-10 md:grid-cols-2 md:gap-16">
           <Reveal className="flex flex-col items-start gap-4">
             <Eyebrow>{t("landing.trustEyebrow")}</Eyebrow>
@@ -312,34 +314,50 @@ export function FinalCta() {
   const { t, locale } = useI18n();
   const reduce = useReducedMotion();
   return (
-    <section className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pb-28 pt-12 text-center sm:px-6 md:pb-40">
-      <Reveal className="flex flex-col items-center gap-5">
-        <h2 className="text-5xl font-extrabold tracking-[-0.03em] text-navy-950 md:text-7xl">{t("landing.finalTitle")}</h2>
-        <p className="max-w-[46ch] text-lg leading-relaxed text-muted">{t("landing.finalBody")}</p>
-      </Reveal>
-      {reduce ? (
-        <Link
-          href={`/${locale}/auth/sign-in`}
-          className="inline-flex min-h-14 items-center rounded-full bg-ocean-600 px-9 text-base font-semibold text-white hover:bg-navy-800"
-        >
-          {t("landing.cta")}
-        </Link>
-      ) : (
-        <Magnet padding={70} magnetStrength={5}>
-          <StarBorder
-            as={Link}
+    <section className="relative isolate overflow-hidden">
+      <StarPattern id="cta-pattern" className="-z-20 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" opacity={0.1} />
+      <Stars
+        className="-z-10"
+        stars={[
+          { x: "12%", y: "18%", s: 12, d: 0.4 },
+          { x: "82%", y: "14%", s: 14, d: 1.6 },
+          { x: "70%", y: "48%", s: 9, d: 2.4 },
+          { x: "20%", y: "56%", s: 10, d: 1 },
+        ]}
+      />
+      <Lantern className="absolute start-[6%] top-0 -z-10 hidden sm:block" drop={60} size={46} />
+      <Lantern className="absolute end-[7%] top-0 -z-10" drop={110} size={38} delay={1.2} />
+      <CrescentMoon className="absolute end-[18%] top-10 -z-10 hidden size-20 md:block" />
+      <MosqueSkyline className="absolute inset-x-0 bottom-0 -z-10 h-28 opacity-80 md:h-40" />
+      <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pb-44 pt-24 text-center sm:px-6 md:pb-56">
+        <Reveal className="flex flex-col items-center gap-5">
+          <h2 className="text-5xl font-extrabold tracking-[-0.03em] text-navy-950 md:text-7xl">{t("landing.finalTitle")}</h2>
+          <p className="max-w-[46ch] text-lg leading-relaxed text-muted">{t("landing.finalBody")}</p>
+        </Reveal>
+        {reduce ? (
+          <Link
             href={`/${locale}/auth/sign-in`}
-            color="#00b4d8"
-            theme="light"
-            backgroundColor="#0077b6"
-            textColor="#ffffff"
-            radius={999}
-            className="min-h-14 px-9 text-base font-semibold"
+            className="inline-flex min-h-14 items-center rounded-full bg-ocean-600 px-9 text-base font-semibold text-white hover:bg-navy-800"
           >
             {t("landing.cta")}
-          </StarBorder>
-        </Magnet>
-      )}
+          </Link>
+        ) : (
+          <Magnet padding={70} magnetStrength={5}>
+            <StarBorder
+              as={Link}
+              href={`/${locale}/auth/sign-in`}
+              color="#00b4d8"
+              theme="light"
+              backgroundColor="#0077b6"
+              textColor="#ffffff"
+              radius={999}
+              className="min-h-14 px-9 text-base font-semibold"
+            >
+              {t("landing.cta")}
+            </StarBorder>
+          </Magnet>
+        )}
+      </div>
     </section>
   );
 }

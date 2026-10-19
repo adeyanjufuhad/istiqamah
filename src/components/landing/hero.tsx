@@ -10,6 +10,7 @@ import RotatingText from "@/components/reactbits/RotatingText";
 import SplitText from "@/components/reactbits/SplitText";
 import { useI18n } from "@/i18n/client";
 import { useMotionPref } from "./motion-pref";
+import { ArabicTexture, CrescentMoon, Lantern, MosqueSkyline, Stars } from "./ornaments";
 import { KhatmCard, NextPrayerCard, NudgeCard, TodayCard } from "./preview-cards";
 
 export function Hero({ rotating }: { rotating: string[] }) {
@@ -24,8 +25,24 @@ export function Hero({ rotating }: { rotating: string[] }) {
         <Aurora colorStops={["#90e0ef", "#00b4d8", "#caf0f8"]} amplitude={0.9} blend={0.55} speed={0.6} lightMode paused={paused} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f5fbfd]/40 to-[#f5fbfd]" />
       </div>
+      <ArabicTexture className="-z-10 opacity-[0.045]" />
+      <Stars
+        className="-z-10"
+        stars={[
+          { x: "8%", y: "16%", s: 14, d: 0 },
+          { x: "38%", y: "9%", s: 10, d: 1.2 },
+          { x: "57%", y: "21%", s: 16, d: 2.1 },
+          { x: "71%", y: "8%", s: 9, d: 0.6 },
+          { x: "90%", y: "30%", s: 12, d: 1.7 },
+          { x: "24%", y: "34%", s: 8, d: 2.8 },
+        ]}
+      />
+      <CrescentMoon className="absolute end-5 top-24 -z-10 size-20 md:end-[6%] md:top-28 md:size-32" />
+      <Lantern className="absolute start-[47%] top-0 -z-10 hidden lg:block" drop={70} size={44} />
+      <Lantern className="absolute start-[53%] top-0 -z-10 hidden lg:block" drop={130} size={34} delay={1.4} />
+      <MosqueSkyline className="absolute inset-x-0 bottom-0 -z-10 h-36 md:h-56" />
 
-      <div className="mx-auto grid min-h-[100dvh] max-w-6xl grid-cols-1 items-center gap-14 px-4 pb-20 pt-32 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:gap-8 md:pt-28">
+      <div className="mx-auto grid min-h-[100dvh] max-w-6xl grid-cols-1 items-center gap-14 px-4 pb-44 pt-32 md:pb-56 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:gap-8 md:pt-28">
         <div className="flex flex-col items-start gap-7">
           <span className="max-w-full rounded-full bg-white/70 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-ocean-600 ring-1 ring-navy-950/5 backdrop-blur">
             {t("landing.eyebrow")}
