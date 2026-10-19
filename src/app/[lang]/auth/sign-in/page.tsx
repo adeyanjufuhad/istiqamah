@@ -5,6 +5,7 @@ import { LogoMark } from "@/components/logo";
 import { SiteFooter } from "@/components/site-footer";
 import { getLocale, getT } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
+import { safeNext } from "@/lib/safe-next";
 import { SignInForm } from "./sign-in-form";
 
 // Reads the session cookie: blocks on the server instead of prerendering.
@@ -12,9 +13,10 @@ export const instant = false;
 
 export const metadata: Metadata = { title: "Sign in" };
 
-export default async function SignInPage() {
+export default async function SignInPage({ searchParams }: PageProps<"/[lang]/auth/sign-in">) {
   const [locale, t] = await Promise.all([getLocale(), getT()]);
-  if (await getSessionUser()) redirect(`/${locale}/today`);
+  const next = safeNext((await searchParams).next, locale);
+  if (await getSessionUser()) redirect(next ?? `/${locale}/today`);
 
   return (
     <>
@@ -27,7 +29,7 @@ export default async function SignInPage() {
           <h1 className="text-3xl font-bold tracking-tight">{t("auth.signInTitle")}</h1>
           <p className="leading-relaxed text-muted">{t("auth.signInBody")}</p>
         </div>
-        <SignInForm />
+        <SignInForm next={next} />
       </main>
       <SiteFooter />
     </>

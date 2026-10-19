@@ -31,7 +31,9 @@ export default async function proxy(req: NextRequest) {
   }
 
   // Optimistic check + session refresh. Pages still verify the session server-side.
-  if (PROTECTED.has(second)) return guards[first](req);
+  // Also run it wherever a sign-in callback lands (e.g. an invite link): the SDK
+  // completes Google / magic-link sign-in by exchanging this verifier in middleware.
+  if (PROTECTED.has(second) || req.nextUrl.searchParams.has("neon_auth_session_verifier")) return guards[first](req);
 
   return NextResponse.next();
 }

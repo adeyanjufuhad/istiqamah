@@ -54,3 +54,23 @@ describe("fasting hints", () => {
   });
   it("still works without a Hijri date", () => assert.deepEqual(fastingHints("2026-10-19", null), ["monday"]));
 });
+
+describe("safeNext (open-redirect guard)", async () => {
+  const { safeNext } = await import("./safe-next");
+  it("allows in-locale paths", () => assert.equal(safeNext("/en/join/K7MR2XQ9", "en"), "/en/join/K7MR2XQ9"));
+  it("rejects other origins and tricks", () => {
+    for (const bad of ["https://evil.test", "//evil.test", "/\evil.test", "/ar/today", "/en/../x", "/en/x?y=1", 42, null])
+      assert.equal(safeNext(bad, "en"), null, String(bad));
+  });
+});
+
+describe("dua keys", async () => {
+  const { parseDuaKey, duaKey, ENCOURAGEMENT_DUAS } = await import("./content/hisn-shared");
+  it("round-trips curated duas", () => {
+    for (const d of ENCOURAGEMENT_DUAS) assert.deepEqual(parseDuaKey(duaKey(d)), d);
+  });
+  it("rejects anything not curated", () => {
+    assert.equal(parseDuaKey("dua.hisn.1.1"), null);
+    assert.equal(parseDuaKey("dua.custom.text"), null);
+  });
+});

@@ -2,6 +2,7 @@
  * Typed mirror of db/migrations/*.sql for querying with Drizzle.
  * The SQL migrations are the source of truth (including RLS); keep this in sync.
  */
+import { sql } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -80,9 +81,10 @@ export const circles = pgTable("circles", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   description: text("description"),
-  inviteCode: text("invite_code").notNull(),
+  inviteCode: text("invite_code").notNull().default(sql`app.gen_invite_code()`),
   maxMembers: smallint("max_members").notNull().default(12),
-  createdBy: uuid("created_by").notNull(),
+  // Nullable since 0002: a circle outlives its creator.
+  createdBy: uuid("created_by"),
   ...timestamps,
 });
 
@@ -115,6 +117,27 @@ export const nudges = pgTable("nudges", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   readAt: timestamp("read_at", { withTimezone: true }),
 });
+
+export const khatms = pgTable("khatms", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  circleId: uuid("circle_id").notNull(),
+  title: text("title"),
+  createdBy: uuid("created_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+});
+
+export const khatmJuz = pgTable(
+  "khatm_juz",
+  {
+    khatmId: uuid("khatm_id").notNull(),
+    juz: smallint("juz").notNull(),
+    userId: uuid("user_id").notNull(),
+    claimedAt: timestamp("claimed_at", { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (t) => [primaryKey({ columns: [t.khatmId, t.juz] })],
+);
 
 export type Profile = typeof profiles.$inferSelect;
 export type Habit = typeof habits.$inferSelect;

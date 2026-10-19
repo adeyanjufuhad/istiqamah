@@ -7,7 +7,7 @@ import { Button, buttonClass, Card, Field, Input, Select } from "@/components/ui
 import { useI18n } from "@/i18n/client";
 import type { HabitKind } from "@/lib/db/schema";
 import type { TrackerHabit } from "@/lib/tracker/data";
-import { addCustomHabit, deleteCustomHabit, setHabitActive, trackBuiltIn, updateTarget } from "./actions";
+import { addCustomHabit, deleteCustomHabit, setHabitActive, setHabitShared, trackBuiltIn, updateTarget } from "./actions";
 
 const BUILT_INS: Exclude<HabitKind, "custom">[] = [
   "fajr",
@@ -46,6 +46,7 @@ export function ManageHabits({ habits }: { habits: TrackerHabit[] }) {
                   {t("manage.stop")}
                 </Button>
               </div>
+              <ShareToggle habit={h} />
               {h.targetValue && h.unit && <TargetForm habit={h} />}
             </li>
           ))}
@@ -106,6 +107,38 @@ export function ManageHabits({ habits }: { habits: TrackerHabit[] }) {
         {t("manage.back")}
       </Link>
     </div>
+  );
+}
+
+function ShareToggle({ habit }: { habit: TrackerHabit }) {
+  const { t } = useI18n();
+  const [pending, start] = useTransition();
+  const [on, setOn] = useState(habit.shareWithCircles);
+  const id = `share-${habit.id}`;
+  return (
+    <label htmlFor={id} className="flex min-h-12 cursor-pointer items-center justify-between gap-4 rounded-2xl bg-surface-2 px-4 py-2">
+      <span className="flex flex-col">
+        <span className="text-sm font-semibold">{t("manage.share")}</span>
+        <span className="text-xs text-muted">{t("manage.shareHelp")}</span>
+      </span>
+      <input
+        id={id}
+        type="checkbox"
+        role="switch"
+        className="peer sr-only"
+        checked={on}
+        disabled={pending}
+        onChange={(e) => {
+          const next = e.target.checked;
+          setOn(next);
+          start(() => setHabitShared(habit.id, next));
+        }}
+      />
+      <span
+        aria-hidden="true"
+        className="relative h-7 w-12 shrink-0 rounded-full bg-border transition-[background-color] duration-300 ease-soft after:absolute after:start-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform after:duration-300 after:ease-soft peer-checked:bg-primary peer-checked:after:translate-x-5 rtl:peer-checked:after:-translate-x-5 peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--focus)]"
+      />
+    </label>
   );
 }
 

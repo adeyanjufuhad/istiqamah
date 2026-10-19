@@ -7,12 +7,12 @@ import { authClient } from "@/lib/auth/client";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function SignInForm() {
+export function SignInForm({ next }: { next: string | null }) {
   const { t, locale } = useI18n();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "google">("idle");
   const [error, setError] = useState<string | null>(null);
-  const callbackURL = `/${locale}/today`;
+  const callbackURL = next ?? `/${locale}/today`;
 
   async function sendLink(e: FormEvent) {
     e.preventDefault();

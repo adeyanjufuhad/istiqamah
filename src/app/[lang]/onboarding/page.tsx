@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { LogoMark } from "@/components/logo";
 import { getLocale, getT } from "@/i18n/server";
 import { getProfile, requireUser } from "@/lib/auth/session";
+import { safeNext } from "@/lib/safe-next";
 import { OnboardingForm } from "./onboarding-form";
 
 export const instant = false;
@@ -13,9 +14,11 @@ export default async function OnboardingPage({ searchParams }: PageProps<"/[lang
   const [locale, t] = await Promise.all([getLocale(), getT()]);
   const user = await requireUser(locale);
   const profile = await getProfile(user.id);
-  const editing = (await searchParams).edit === "1";
+  const sp = await searchParams;
+  const editing = sp.edit === "1";
+  const next = safeNext(sp.next, locale);
 
-  if (profile?.onboardedAt && !editing) redirect(`/${locale}/today`);
+  if (profile?.onboardedAt && !editing) redirect(next ?? `/${locale}/today`);
 
   return (
     <main id="main" className="mx-auto flex w-full max-w-md flex-col gap-6 px-5 pb-12 pt-8">
@@ -25,6 +28,7 @@ export default async function OnboardingPage({ searchParams }: PageProps<"/[lang
       </div>
       <OnboardingForm
         mode={editing && profile ? "edit" : "setup"}
+        nextPath={next}
         initial={{
           displayName: profile?.displayName ?? user.name ?? "",
           timezone: profile?.timezone ?? null,

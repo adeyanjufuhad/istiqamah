@@ -7,6 +7,7 @@ import { getSessionUser } from "@/lib/auth/session";
 import { schema, withUser } from "@/lib/db";
 import { habitsForChoices, ONBOARDING_CHOICES, QURAN_UNITS } from "@/lib/habits/defaults";
 import { METHOD_IDS } from "@/lib/prayer/methods";
+import { safeNext } from "@/lib/safe-next";
 
 const isTimeZone = (tz: string) => {
   try {
@@ -33,6 +34,7 @@ const Input = z.object({
   habits: z.array(z.enum(ONBOARDING_CHOICES)).max(ONBOARDING_CHOICES.length),
   quranTarget: z.number().int().min(1).max(600),
   quranUnit: z.enum(QURAN_UNITS),
+  next: z.string().max(200).nullable().optional(),
 });
 
 export type OnboardingInput = z.input<typeof Input>;
@@ -76,5 +78,6 @@ export async function saveOnboarding(raw: OnboardingInput): Promise<{ error: str
     }
   });
 
-  redirect(`/${data.locale}/${data.mode === "edit" ? "settings" : "today"}`);
+  const next = safeNext(data.next, data.locale);
+  redirect(next ?? `/${data.locale}/${data.mode === "edit" ? "settings" : "today"}`);
 }

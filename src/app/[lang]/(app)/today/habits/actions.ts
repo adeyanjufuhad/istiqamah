@@ -123,3 +123,17 @@ export async function deleteCustomHabit(habitId: string) {
   );
   done();
 }
+
+/** Privacy control: whether circle members can see this habit's daily completion. */
+export async function setHabitShared(habitId: string, shared: boolean) {
+  const id = z.uuid().parse(habitId);
+  const user = await userOrRedirect();
+  await withUser(user.id, (tx) =>
+    tx
+      .update(schema.habits)
+      .set({ shareWithCircles: shared })
+      .where(and(eq(schema.habits.id, id), eq(schema.habits.userId, user.id))),
+  );
+  done();
+  revalidatePath("/[lang]/circles/[id]", "page");
+}

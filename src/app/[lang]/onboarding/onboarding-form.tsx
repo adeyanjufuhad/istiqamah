@@ -23,7 +23,7 @@ type Step = "name" | "timezone" | "location" | "habits";
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
-export function OnboardingForm({ mode, initial }: { mode: "setup" | "edit"; initial: Initial }) {
+export function OnboardingForm({ mode, initial, nextPath }: { mode: "setup" | "edit"; initial: Initial; nextPath?: string | null }) {
   const { t, locale } = useI18n();
   const steps: Step[] = mode === "setup" ? ["name", "timezone", "location", "habits"] : ["name", "timezone", "location"];
   const [index, setIndex] = useState(0);
@@ -101,6 +101,7 @@ export function OnboardingForm({ mode, initial }: { mode: "setup" | "edit"; init
         habits,
         quranTarget,
         quranUnit,
+        next: nextPath ?? null,
       });
       if (result?.error) setError(t("common.error"));
     });
