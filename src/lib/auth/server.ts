@@ -8,4 +8,5 @@ export const auth = createNeonAuth({
     // Magic links and OAuth return via a cross-site navigation; `strict` would drop the cookie.
     sameSite: "lax",
   },
+  logLevel: (process.env.NEON_AUTH_LOG_LEVEL as "silent" | "error" | "warn" | "info" | "debug" | undefined) ?? "warn",
 });

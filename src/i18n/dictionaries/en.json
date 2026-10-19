@@ -104,8 +104,42 @@
   },
   "today": {
     "greeting": "Assalamu alaykum, {name}",
-    "comingSoon": "Your daily tracker is being prepared. It arrives in the next update, in shaa Allah.",
-    "tracking": "You're tracking"
+    "hijri": "{day} {month} {year} AH",
+    "progress": "{done} of {total} done today",
+    "allDone": "Alhamdulillah — everything is done for today.",
+    "noneYet": "A new day. Start with whatever is closest.",
+    "someDone": "Steady steps. Keep going, one at a time.",
+    "prayers": "Prayers",
+    "quran": "Quran",
+    "adhkar": "Adhkar",
+    "fasting": "Fasting",
+    "yourHabits": "Your habits",
+    "manageHabits": "Manage habits",
+    "nextPrayer": "Next",
+    "noLocation": "Add your location to see prayer times.",
+    "addLocation": "Add location",
+    "timesUnavailable": "Prayer times are unavailable right now.",
+    "methodNote": "Times: {method}",
+    "streak": "{count} days in a row",
+    "streakOne": "Done today",
+    "beginAgain": "Begin again today",
+    "markDone": "Mark {habit} as done",
+    "decrease": "Less {habit}",
+    "increase": "More {habit}",
+    "ofTarget": "{value} of {target} {unit}",
+    "fastHint": {
+      "monday": "Monday",
+      "thursday": "Thursday",
+      "white_days": "White days",
+      "ramadan": "Ramadan"
+    },
+    "fastHintLabel": "Today is",
+    "sync": {
+      "saving": "Saving…",
+      "offline": "Offline — saved on this device, will sync when you reconnect.",
+      "pending": "{count} change(s) waiting to sync.",
+      "unauthorized": "Please sign in again to sync your changes."
+    }
   },
   "settings": {
     "title": "Settings",
@@ -139,11 +173,49 @@
     "about": "About"
   },
   "placeholder": {
-    "week": "A gentle weekly view of your consistency arrives with the daily tracker, in shaa Allah.",
     "circles": "Small circles with friends — encouragement, nudges and a shared khatm — are coming soon, in shaa Allah."
   },
   "offline": {
     "title": "You're offline",
     "body": "No connection right now. Anything you've opened recently is still available."
+  },
+  "week": {
+    "title": "This week",
+    "previous": "Previous week",
+    "next": "Next week",
+    "daysDone": "{done}/{total}",
+    "legendDone": "Done",
+    "legendOpen": "Not marked",
+    "beginAgain": "Missed days are behind you. Every day is a chance to begin again.",
+    "editHint": "Tap a day to correct it (up to 7 days back).",
+    "cell": "{habit}, {date}: {state}",
+    "done": "done",
+    "notDone": "not marked",
+    "bestStreak": "Longest run: {count} days",
+    "empty": "Nothing tracked yet this week."
+  },
+  "manage": {
+    "title": "Manage habits",
+    "intro": "Track what helps you right now. Stopping a habit keeps its history.",
+    "active": "Tracking",
+    "inactive": "Not tracking",
+    "stop": "Stop tracking",
+    "resume": "Track again",
+    "addTitle": "Add your own habit",
+    "nameLabel": "Habit name",
+    "namePlaceholder": "e.g. Give sadaqah, Call my parents",
+    "goalLabel": "Daily goal",
+    "goalNone": "Just mark it done",
+    "goalCount": "A number of times",
+    "goalMinutes": "A number of minutes",
+    "amountLabel": "Amount",
+    "add": "Add habit",
+    "quranGoal": "Daily Quran goal",
+    "saveGoal": "Save goal",
+    "builtIn": "Suggested",
+    "addBuiltIn": "Track this",
+    "remove": "Remove",
+    "removeConfirm": "Remove \"{name}\" and its history? This cannot be undone.",
+    "back": "Back to today"
   }
 }
