@@ -167,6 +167,69 @@ async function main() {
   ok((await as(A, (c) => c.query("select * from nudges"))).rowCount === 1, "recipient sees nudge");
   ok((await as(C, (c) => c.query("select * from nudges"))).rowCount === 0, "others cannot see nudge");
 
+  const limited = await as(B, async (c) => {
+    for (let i = 0; i < 2; i++)
+      await c.query("insert into nudges (circle_id, recipient_id, kind, message_key) values ($1, $2, 'dua', 'dua.hisn.43.139')", [
+        circle.id,
+        A,
+      ]);
+    return c
+      .query("insert into nudges (circle_id, recipient_id, kind, message_key) values ($1, $2, 'nudge', 'nudge.begin_again')", [
+        circle.id,
+        A,
+      ])
+      .then(() => false)
+      .catch(() => true);
+  }).catch(() => true);
+  ok(limited, "nudges are limited to 3 per friend per day");
+
+  console.log("invite preview");
+  const preview = await as(C, (c) => c.query("select * from app.circle_preview($1)", [circle.invite_code]));
+  ok(preview.rows[0]?.name === "Fajr friends" && preview.rows[0]?.member_count === 2, "invite code shows name + size only");
+  ok((await as(C, (c) => c.query("select * from app.circle_preview('NOPE1234')"))).rowCount === 0, "bad code previews nothing");
+
+  console.log("khatm");
+  const khatmId = await as(A, async (c) =>
+    (await c.query("insert into khatms (circle_id, title) values ($1, 'Ramadan khatm') returning id", [circle.id])).rows[0].id as string,
+  );
+  await rejects(
+    as(A, (c) => c.query("insert into khatms (circle_id) values ($1)", [circle.id])),
+    "only one active khatm per circle",
+  );
+  await rejects(
+    as(C, (c) => c.query("insert into khatm_juz (khatm_id, juz) values ($1, 1)", [khatmId])),
+    "non-member cannot claim a juz",
+  );
+  await as(B, (c) => c.query("insert into khatm_juz (khatm_id, juz) values ($1, 1)", [khatmId]));
+  await rejects(
+    as(A, (c) => c.query("insert into khatm_juz (khatm_id, juz) values ($1, 1)", [khatmId])),
+    "a juz can only be claimed once",
+  );
+  ok(
+    (await as(A, (c) => c.query("update khatm_juz set completed_at = now() where khatm_id = $1 and juz = 1", [khatmId])))
+      .rowCount === 0,
+    "cannot mark someone else's juz",
+  );
+  await as(A, async (c) => {
+    for (let j = 2; j <= 30; j++) await c.query("insert into khatm_juz (khatm_id, juz, completed_at) values ($1, $2, now())", [khatmId, j]);
+  });
+  ok(
+    (await as(A, (c) => c.query("select completed_at from khatms where id = $1", [khatmId]))).rows[0].completed_at === null,
+    "khatm stays open until every juz is read",
+  );
+  await as(B, (c) => c.query("update khatm_juz set completed_at = now() where khatm_id = $1 and juz = 1", [khatmId]));
+  ok(
+    (await as(A, (c) => c.query("select completed_at from khatms where id = $1", [khatmId]))).rows[0].completed_at !== null,
+    "khatm completes when all 30 juz are read",
+  );
+  ok((await as(C, (c) => c.query("select * from khatms"))).rowCount === 0, "non-member cannot see khatm");
+
+  console.log("ownership");
+  await as(A, (c) => c.query("delete from circle_members where circle_id = $1 and user_id = $2", [circle.id, A]));
+  const roles = await as(B, (c) => c.query("select role from circle_members where circle_id = $1 and user_id = $2", [circle.id, B]));
+  ok(roles.rows[0]?.role === "owner", "when the owner leaves, the next member becomes owner");
+  await as(A, (c) => c.query("select app.join_circle($1)", [circle.invite_code]));
+
   console.log("leaving");
   await as(B, (c) => c.query("delete from circle_members where circle_id = $1 and user_id = $2", [circle.id, B]));
   ok((await as(B, (c) => c.query("select * from habits"))).rowCount === 0, "after leaving, shared habits disappear");
