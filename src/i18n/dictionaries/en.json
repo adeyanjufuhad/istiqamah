@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "Istiqamah",
+    "tagline": "Small, steady steps in your deen — together.",
+    "description": "A gentle daily companion for prayer, Quran, adhkar and fasting, with small accountability circles of friends."
+  },
+  "common": {
+    "continue": "Continue",
+    "back": "Back",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "optional": "Optional",
+    "loading": "Loading…",
+    "skip": "Skip for now",
+    "skipToContent": "Skip to content",
+    "error": "Something went wrong. Please try again."
+  },
+  "nav": {
+    "today": "Today",
+    "week": "Week",
+    "circles": "Circles",
+    "settings": "Settings",
+    "main": "Main navigation"
+  },
+  "landing": {
+    "headline": "Steadfast, one day at a time.",
+    "body": "Track your prayers, Quran, adhkar and fasting with kindness — and walk the path with a few close friends. No rankings, no shame. Just begin again, every day.",
+    "cta": "Get started",
+    "haveAccount": "I already have an account",
+    "point1Title": "Daily tracker",
+    "point1Body": "The five prayers, Quran, morning and evening adhkar, fasting and your own habits.",
+    "point2Title": "Small circles",
+    "point2Body": "Encourage friends privately. You choose what they can see.",
+    "point3Title": "Private by default",
+    "point3Body": "Minimal data, no ads, no public leaderboards. Export or delete anytime.",
+    "deleted": "Your account and all of your data have been deleted. May Allah make it easy for you."
+  },
+  "auth": {
+    "signInTitle": "Assalamu alaykum",
+    "signInBody": "Sign in with a link sent to your email, or continue with Google. New here? The same steps create your account.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "or": "or",
+    "google": "Continue with Google",
+    "checkEmailTitle": "Check your email",
+    "checkEmailBody": "We sent a sign-in link to {email}. It expires in 15 minutes. You can close this tab.",
+    "useDifferentEmail": "Use a different email",
+    "invalidEmail": "Please enter a valid email address.",
+    "signOut": "Sign out"
+  },
+  "onboarding": {
+    "title": "Let's set things up",
+    "stepOf": "Step {current} of {total}",
+    "nameTitle": "What should we call you?",
+    "nameHelp": "Only people in your circles will see this name.",
+    "nameLabel": "Name",
+    "timezoneTitle": "Your timezone",
+    "timezoneHelp": "Used so your day starts and ends at the right time.",
+    "timezoneLabel": "Timezone",
+    "locationTitle": "Your location for prayer times",
+    "locationHelp": "We store an approximate location (about 1 km) only to calculate prayer times. You can change or clear it anytime.",
+    "useMyLocation": "Use my current location",
+    "locating": "Finding your location…",
+    "locationSet": "Approximate location saved: {lat}, {lng}",
+    "locationDenied": "We couldn't access your location. You can type your city instead.",
+    "orCity": "Or enter a city",
+    "cityLabel": "City",
+    "countryLabel": "Country",
+    "methodLabel": "Calculation method",
+    "methodHelp": "Different organisations use different conventions. If unsure, ask your local masjid which they follow.",
+    "asrLabel": "Asr time",
+    "asrStandard": "Standard (Shafi'i, Maliki, Hanbali)",
+    "asrHanafi": "Hanafi",
+    "habitsTitle": "What would you like to track?",
+    "habitsHelp": "Start small. You can add, remove or adjust habits anytime.",
+    "quranTarget": "Daily Quran goal",
+    "finish": "Begin",
+    "finishing": "Setting up…"
+  },
+  "habits": {
+    "prayers": "The five daily prayers",
+    "prayersHelp": "Fajr, Dhuhr, Asr, Maghrib and Isha",
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "quran": "Quran",
+    "quranHelp": "Read a little every day",
+    "adhkar_morning": "Morning adhkar",
+    "adhkar_morningHelp": "After Fajr until sunrise",
+    "adhkar_evening": "Evening adhkar",
+    "adhkar_eveningHelp": "After Asr until Maghrib",
+    "fasting": "Fasting",
+    "fastingHelp": "Including Mondays, Thursdays and the white days",
+    "units": {
+      "pages": "pages",
+      "minutes": "minutes",
+      "count": "times"
+    }
+  },
+  "today": {
+    "greeting": "Assalamu alaykum, {name}",
+    "comingSoon": "Your daily tracker is being prepared. It arrives in the next update, in shaa Allah.",
+    "tracking": "You're tracking"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "profile": "Profile",
+    "editProfile": "Edit name, timezone and location",
+    "yourData": "Your data",
+    "exportTitle": "Export my data",
+    "exportBody": "Download everything we store about you as a JSON file.",
+    "exportButton": "Download export",
+    "deleteTitle": "Delete my account",
+    "deleteBody": "Permanently deletes your profile, habits, history, circle memberships and the circles you created. This cannot be undone.",
+    "deleteConfirmLabel": "Type DELETE to confirm",
+    "deleteButton": "Delete my account",
+    "deleting": "Deleting…",
+    "deleteMismatch": "Please type DELETE to confirm.",
+    "account": "Account",
+    "signedInAs": "Signed in as {email}",
+    "about": "About & guidance",
+    "privacy": "Privacy"
+  },
+  "scholar": {
+    "note": "Istiqamah is a tool for consistency, not a source of rulings. It does not issue fatwas. For questions of fiqh, please consult a qualified scholar or your local imam."
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "about": "About"
+  },
+  "placeholder": {
+    "week": "A gentle weekly view of your consistency arrives with the daily tracker, in shaa Allah.",
+    "circles": "Small circles with friends — encouragement, nudges and a shared khatm — are coming soon, in shaa Allah."
+  },
+  "offline": {
+    "title": "You're offline",
+    "body": "No connection right now. Anything you've opened recently is still available."
+  }
+}

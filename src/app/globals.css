@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Dark mode follows the `.dark` class set on <html> by the theme script. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Calm palette: cream + soft greens. Every text/background pair below meets
+ * WCAG AA (4.5:1) for body text; `--primary` on `--bg` is ~6:1.
+ */
+:root {
+  --bg: #faf7f0;
+  --surface: #fffdf8;
+  --surface-2: #f2eee3;
+  --ink: #1f2a24;
+  --muted: #56645b;
+  --border: #e3dccb;
+  --primary: #2f6b4f;
+  --primary-ink: #ffffff;
+  --primary-soft: #e2eee6;
+  --primary-soft-ink: #1f4d38;
+  --accent: #8a6420;
+  --danger: #a33a2c;
+  --focus: #2f6b4f;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0f1714;
+  --surface: #16211c;
+  --surface-2: #1c2a24;
+  --ink: #e9f0eb;
+  --muted: #a5b5ab;
+  --border: #2a3b33;
+  --primary: #86c9a5;
+  --primary-ink: #0d1f17;
+  --primary-soft: #1f3529;
+  --primary-soft-ink: #bfe3cf;
+  --accent: #e0bb74;
+  --danger: #f08b7c;
+  --focus: #86c9a5;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-ink: var(--primary-soft-ink);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-naskh), "Noto Naskh Arabic", serif;
+  --radius-card: 1.25rem;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
