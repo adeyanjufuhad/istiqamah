@@ -1,44 +1,37 @@
 @import "tailwindcss";
 
-/* Dark mode follows the `.dark` class set on <html> by the theme script. */
-@custom-variant dark (&:where(.dark, .dark *));
-
 /*
- * Calm palette: cream + soft greens. Every text/background pair below meets
- * WCAG AA (4.5:1) for body text; `--primary` on `--bg` is ~6:1.
+ * Istiqamah design tokens — see DESIGN.md. Light-only by design.
+ * Owner palette: #03045e #023e8a #0077b6 #0096c7 #00b4d8 #48cae4 #90e0ef #ade8f4 #caf0f8
+ * Text pairs meet WCAG AA: ink 16:1, muted 6.8:1 on canvas; white on primary 4.7:1.
  */
 :root {
-  --bg: #faf7f0;
-  --surface: #fffdf8;
-  --surface-2: #f2eee3;
-  --ink: #1f2a24;
-  --muted: #56645b;
-  --border: #e3dccb;
-  --primary: #2f6b4f;
-  --primary-ink: #ffffff;
-  --primary-soft: #e2eee6;
-  --primary-soft-ink: #1f4d38;
-  --accent: #8a6420;
-  --danger: #a33a2c;
-  --focus: #2f6b4f;
-  color-scheme: light;
-}
+  --navy-950: #03045e;
+  --navy-800: #023e8a;
+  --ocean-600: #0077b6;
+  --ocean-500: #0096c7;
+  --sky-400: #00b4d8;
+  --sky-300: #48cae4;
+  --sky-200: #90e0ef;
+  --sky-100: #ade8f4;
+  --sky-50: #caf0f8;
 
-.dark {
-  --bg: #0f1714;
-  --surface: #16211c;
-  --surface-2: #1c2a24;
-  --ink: #e9f0eb;
-  --muted: #a5b5ab;
-  --border: #2a3b33;
-  --primary: #86c9a5;
-  --primary-ink: #0d1f17;
-  --primary-soft: #1f3529;
-  --primary-soft-ink: #bfe3cf;
-  --accent: #e0bb74;
-  --danger: #f08b7c;
-  --focus: #86c9a5;
-  color-scheme: dark;
+  --bg: #f5fbfd;
+  --surface: #ffffff;
+  --surface-2: #eef7fa;
+  --ink: var(--navy-950);
+  --muted: #4a5b7c;
+  --border: #d7e9f0;
+  --primary: var(--ocean-600);
+  --primary-hover: var(--navy-800);
+  --primary-ink: #ffffff;
+  --primary-soft: var(--sky-50);
+  --primary-soft-ink: var(--navy-950);
+  --accent: var(--ocean-500);
+  --danger: #b42318;
+  --focus: var(--ocean-600);
+  --ease-out-soft: cubic-bezier(0.32, 0.72, 0, 1);
+  color-scheme: light;
 }
 
 @theme inline {
@@ -49,18 +42,33 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-ink: var(--primary-ink);
   --color-primary-soft: var(--primary-soft);
   --color-primary-soft-ink: var(--primary-soft-ink);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --color-navy-950: var(--navy-950);
+  --color-navy-800: var(--navy-800);
+  --color-ocean-600: var(--ocean-600);
+  --color-ocean-500: var(--ocean-500);
+  --color-sky-400: var(--sky-400);
+  --color-sky-300: var(--sky-300);
+  --color-sky-200: var(--sky-200);
+  --color-sky-100: var(--sky-100);
+  --color-sky-50: var(--sky-50);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-arabic: var(--font-naskh), "Noto Naskh Arabic", serif;
-  --radius-card: 1.25rem;
+  --radius-card: 1.75rem;
+  --ease-soft: var(--ease-out-soft);
+  --shadow-soft: 0 24px 48px -24px rgb(3 4 94 / 0.18);
+  --shadow-lift: 0 30px 60px -28px rgb(3 4 94 / 0.28);
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgb(0 119 182 / 0.12);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -69,23 +77,69 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
+  touch-action: manipulation;
 }
 
 html[lang="ar"] body {
   font-family: var(--font-arabic);
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
+}
+
+select {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--sky-100);
+  color: var(--navy-950);
+}
+
+@media (pointer: fine) {
+  html {
+    overscroll-behavior: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Landing micro-motion (all transform/opacity; disabled by the reduced-motion block above). */
+@keyframes check-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes menu-in {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

@@ -16,7 +16,7 @@ function StreakNote({ streak }: { streak?: Streak }) {
   if (streak.current >= 2) return <span className="text-sm text-muted">{t("today.streak", { count: streak.current })}</span>;
   if (streak.current === 1 && streak.doneToday) return <span className="text-sm text-muted">{t("today.streakOne")}</span>;
   if (streak.current === 0 && streak.best > 0)
-    return <span className="text-sm text-primary-soft-ink dark:text-primary">{t("today.beginAgain")}</span>;
+    return <span className="text-sm text-primary-soft-ink">{t("today.beginAgain")}</span>;
   return null;
 }
 

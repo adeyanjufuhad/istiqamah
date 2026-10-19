@@ -171,7 +171,7 @@ export function OnboardingForm({ mode, initial }: { mode: "setup" | "edit"; init
               {geo === "locating" ? t("onboarding.locating") : t("onboarding.useMyLocation")}
             </Button>
             {coords && geo !== "locating" && (
-              <p className="text-sm text-primary-soft-ink dark:text-primary">
+              <p className="text-sm text-primary-soft-ink">
                 {t("onboarding.locationSet", { lat: coords.lat.toFixed(2), lng: coords.lng.toFixed(2) })}
               </p>
             )}

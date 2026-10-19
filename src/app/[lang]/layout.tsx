@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Figtree, Noto_Naskh_Arabic } from "next/font/google";
+import { Noto_Naskh_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/sw-register";
-import { themeInitScript } from "@/components/theme";
 import { I18nProvider } from "@/i18n/client";
 import { dirFor, locales } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/server";
 import "../globals.css";
 
-const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree", display: "swap" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
 const naskh = Noto_Naskh_Arabic({ subsets: ["arabic"], variable: "--font-naskh", display: "swap" });
 
 export function generateStaticParams() {
@@ -29,10 +28,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf7f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1714" },
-  ],
+  themeColor: "#f5fbfd",
+  colorScheme: "light",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
@@ -43,12 +40,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
     <html
       lang={locale}
       dir={dirFor(locale)}
-      className={`${figtree.variable} ${naskh.variable}`}
-      suppressHydrationWarning
+      className={`${jakarta.variable} ${naskh.variable}`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body>
         <a
           href="#main"

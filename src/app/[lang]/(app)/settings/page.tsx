@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ThemePicker } from "@/components/theme";
 import { Button, buttonClass, Card, ScholarNote } from "@/components/ui";
 import { getLocale, getT } from "@/i18n/server";
 import { requireOnboardedUser } from "@/lib/auth/session";
@@ -17,11 +16,6 @@ export default async function SettingsPage() {
   return (
     <>
       <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
-
-      <Card className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">{t("settings.appearance")}</h2>
-        <ThemePicker />
-      </Card>
 
       <Card className="flex flex-col gap-3">
         <h2 className="text-lg font-semibold">{t("settings.profile")}</h2>

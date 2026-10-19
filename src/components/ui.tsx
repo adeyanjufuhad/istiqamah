@@ -5,15 +5,15 @@ const cx = (...parts: (string | false | null | undefined)[]) => parts.filter(Boo
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-primary text-primary-ink hover:opacity-90",
-  secondary: "bg-surface text-ink border border-border hover:bg-surface-2",
+  primary: "bg-primary text-primary-ink shadow-[0_10px_24px_-12px_rgb(0_119_182/0.6)] hover:bg-primary-hover",
+  secondary: "bg-surface text-ink ring-1 ring-border hover:bg-surface-2 hover:ring-sky-100",
   ghost: "text-primary hover:bg-primary-soft",
-  danger: "bg-danger text-white dark:text-bg hover:opacity-90",
+  danger: "bg-danger text-white hover:bg-[#912018]",
 };
 
-// Large tap targets: 48px minimum height throughout.
+// Large tap targets: 48px minimum height throughout. Pills, press feedback, explicit transition properties.
 const base =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 text-base font-semibold transition disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-base font-semibold transition-[background-color,box-shadow,transform,color] duration-300 ease-soft active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100";
 
 export function buttonClass(variant: Variant = "primary", className?: string) {
   return cx(base, variants[variant], className);
@@ -73,7 +73,7 @@ export function Field({
 }
 
 export const inputClass =
-  "min-h-12 w-full rounded-2xl border border-border bg-surface px-4 text-base text-ink placeholder:text-muted/80 focus:border-primary focus:outline-none focus-visible:outline-2";
+  "min-h-12 w-full rounded-2xl border border-border bg-surface px-4 text-base text-ink placeholder:text-muted/80 transition-[border-color,box-shadow] duration-200 ease-soft focus:border-sky-100 focus:shadow-[0_0_0_4px_rgb(0_119_182/0.18)] focus:outline-none";
 
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={cx(inputClass, className)} {...props} />;

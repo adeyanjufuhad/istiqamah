@@ -3,7 +3,10 @@ import type en from "./dictionaries/en.json";
 export type Dictionary = typeof en;
 
 type Join<K, P> = K extends string ? (P extends string ? `${K}.${P}` : never) : never;
+// Arrays (e.g. rotating headline words) are read from the dictionary directly, not via t().
 type Paths<T> = T extends string
+  ? never
+  : T extends readonly unknown[]
   ? never
   : { [K in keyof T & string]: T[K] extends string ? K : Join<K, Paths<T[K]>> }[keyof T & string];
 
