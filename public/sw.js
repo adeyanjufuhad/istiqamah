@@ -2,9 +2,10 @@
  * - Static build assets: cache-first (they are content-hashed).
  * - Pages: network-first, falling back to the last cached copy, then /offline.html.
  * - Never caches /api/* (auth, exports) or non-GET requests.
- * Phase 2 adds an offline queue for tracker check-ins.
+ * Check-ins made offline live in an IndexedDB outbox (src/lib/offline/outbox.ts)
+ * and are flushed to /api/logs by the page when the connection returns.
  */
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC_CACHE = `istiqamah-static-${VERSION}`;
 const PAGE_CACHE = `istiqamah-pages-${VERSION}`;
 const PRECACHE = ["/offline.html", "/icon.svg", "/icons/icon-192.png"];
