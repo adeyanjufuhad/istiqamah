@@ -10,7 +10,8 @@
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
     "db:setup-role": "tsx --env-file=.env.local scripts/setup-app-role.ts",
     "db:test-rls": "tsx --env-file=.env.local scripts/test-rls.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "@neondatabase/auth": "^0.6.0-beta",

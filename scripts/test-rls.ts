@@ -95,6 +95,14 @@ async function main() {
     (await as(B, (c) => c.query("update habits set is_active = false where id = $1", [sharedId]))).rowCount === 0,
     "cannot update someone else's habit",
   );
+  // Same upsert the tracker's /api/logs uses.
+  const upsert = `insert into habit_logs (habit_id, log_date, completed, value) values ($1, current_date, $2, $3)
+    on conflict (habit_id, log_date) do update set completed = excluded.completed, value = excluded.value`;
+  await as(A, (c) => c.query(upsert, [sharedId, false, 0]));
+  await as(A, (c) => c.query(upsert, [sharedId, true, 3]));
+  const mine = await as(A, (c) => c.query("select completed, value from habit_logs where habit_id = $1", [sharedId]));
+  ok(mine.rowCount === 1 && mine.rows[0].completed === true && mine.rows[0].value === 3, "tracker upsert keeps one row per day");
+  await rejects(as(B, (c) => c.query(upsert, [sharedId, false, 0])), "cannot upsert over someone else's check-in");
 
   console.log("circles");
   const circle = await as(A, async (c) => {
