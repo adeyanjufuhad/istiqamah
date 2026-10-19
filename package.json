@@ -14,9 +14,14 @@
     "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@hugeicons/core-free-icons": "^4.3.5",
+    "@hugeicons/react": "^1.1.10",
     "@neondatabase/auth": "^0.6.0-beta",
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
+    "gsap": "^3.15.0",
+    "motion": "^12.43.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
