@@ -139,6 +139,18 @@ export const khatmJuz = pgTable(
   (t) => [primaryKey({ columns: [t.khatmId, t.juz] })],
 );
 
+export const pushSubscriptions = pgTable("push_subscriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull(),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  prayers: boolean("prayers").notNull().default(true),
+  adhkar: boolean("adhkar").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  lastSuccessAt: timestamp("last_success_at", { withTimezone: true }),
+});
+
 export type Profile = typeof profiles.$inferSelect;
 export type Habit = typeof habits.$inferSelect;
 export type HabitKind = (typeof habitKind.enumValues)[number];

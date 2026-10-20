@@ -15,6 +15,7 @@ neonConfig.webSocketConstructor = ws;
 
 const owner = new Pool({ connectionString: process.env.DATABASE_URL });
 const app = new Pool({ connectionString: process.env.DATABASE_APP_URL });
+const dispatch = new Pool({ connectionString: process.env.DATABASE_DISPATCH_URL });
 
 const A = randomUUID();
 const B = randomUUID();
@@ -230,6 +231,39 @@ async function main() {
   ok(roles.rows[0]?.role === "owner", "when the owner leaves, the next member becomes owner");
   await as(A, (c) => c.query("select app.join_circle($1)", [circle.invite_code]));
 
+  console.log("push");
+  const ep = (u: string) => `https://push.example.invalid/${u}`;
+  await as(A, (c) => c.query("insert into push_subscriptions (endpoint, p256dh, auth) values ($1, $2, $3)", [ep(A), "k", "a"]));
+  ok((await as(B, (c) => c.query("select * from push_subscriptions"))).rowCount === 0, "users cannot see others' push subscriptions");
+  await rejects(
+    as(B, (c) =>
+      c.query("insert into push_subscriptions (user_id, endpoint, p256dh, auth) values ($1, $2, $3, $4)", [A, ep("x"), "k", "a"]),
+    ),
+    "cannot register a subscription for someone else",
+  );
+  await rejects(
+    as(B, (c) =>
+      c.query(
+        "insert into push_subscriptions (endpoint, p256dh, auth) values ($1, $2, $3) on conflict (endpoint) do update set prayers = false",
+        [ep(A), "k", "a"],
+      ),
+    ),
+    "cannot take over someone else's push endpoint",
+  );
+  const dispatcher = await dispatch.query("select rolbypassrls from pg_roles where rolname = current_user");
+  ok(dispatcher.rows[0]?.rolbypassrls === false, "dispatcher role cannot bypass RLS");
+  const subs = await dispatch.query(
+    "select p.id, p.timezone from push_subscriptions s join profiles p on p.id = s.user_id where s.endpoint = $1",
+    [ep(A)],
+  );
+  ok(subs.rowCount === 1, "dispatcher can read schedule data for subscribers");
+  ok((await dispatch.query("select id from profiles where id = $1", [B])).rowCount === 0, "dispatcher cannot see users without subscriptions");
+  await rejects(dispatch.query("select display_name from profiles"), "dispatcher cannot read display names");
+  await rejects(dispatch.query("select * from habits"), "dispatcher cannot read habits");
+  await rejects(dispatch.query("select * from habit_logs"), "dispatcher cannot read habit logs");
+  await rejects(dispatch.query("select * from nudges"), "dispatcher cannot read nudges");
+  await rejects(as(A, (c) => c.query("select * from push_deliveries")), "users cannot read delivery logs");
+
   console.log("leaving");
   await as(B, (c) => c.query("delete from circle_members where circle_id = $1 and user_id = $2", [circle.id, B]));
   ok((await as(B, (c) => c.query("select * from habits"))).rowCount === 0, "after leaving, shared habits disappear");
@@ -246,4 +280,5 @@ main()
     await owner.query(`delete from neon_auth."user" where id = any($1::uuid[])`, [[A, B, C]]).catch(() => {});
     await owner.end();
     await app.end();
+    await dispatch.end();
   });

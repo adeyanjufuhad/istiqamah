@@ -1,12 +1,15 @@
 /**
- * Gives the restricted runtime role `istiqamah_app` a fresh password and LOGIN,
- * then writes DATABASE_APP_URL into .env.local. Run after `db:migrate`, and
- * again whenever you want to rotate the password.
+ * Gives the restricted runtime roles fresh passwords and LOGIN, then writes
+ * their connection strings into .env.local. Run after `db:migrate`, and again
+ * whenever you want to rotate the passwords.
  *
  *   npm run db:setup-role
  *
- * The password never leaves your machine except via the env vars you set in
- * Vercel. It is not printed.
+ *   istiqamah_app       → DATABASE_APP_URL       (all user-facing requests)
+ *   istiqamah_dispatch  → DATABASE_DISPATCH_URL  (scheduled push reminders only)
+ *
+ * Passwords never leave your machine except via the env vars you set in
+ * Vercel. They are not printed.
  */
 import { randomBytes } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
@@ -16,50 +19,56 @@ import ws from "ws";
 
 neonConfig.webSocketConstructor = ws;
 
-const ROLE = "istiqamah_app";
+const ROLES = [
+  { role: "istiqamah_app", env: "DATABASE_APP_URL" },
+  { role: "istiqamah_dispatch", env: "DATABASE_DISPATCH_URL" },
+] as const;
+
 const ownerUrl = process.env.DATABASE_URL;
 if (!ownerUrl) {
   console.error("DATABASE_URL is not set (see .env.example).");
   process.exit(1);
 }
 
+function setEnv(env: string, key: string, value: string) {
+  const line = `${key}="${value}"`;
+  const re = new RegExp(`^${key}=.*$`, "m");
+  return re.test(env) ? env.replace(re, line) : `${env.trimEnd()}\n${line}\n`;
+}
+
 async function main() {
-  const password = randomBytes(24).toString("base64url");
+  const only = process.argv[2];
   const pool = new Pool({ connectionString: ownerUrl });
-  try {
-    // Identifiers/literals can't be bound as parameters in ALTER ROLE; the
-    // password is base64url so it contains no quote characters.
-    await pool.query(`alter role ${ROLE} with login nobypassrls password '${password}'`);
-    const { rows } = await pool.query<{ rolbypassrls: boolean; rolsuper: boolean }>(
-      "select rolbypassrls, rolsuper from pg_roles where rolname = $1",
-      [ROLE],
-    );
-    if (!rows[0] || rows[0].rolbypassrls || rows[0].rolsuper) {
-      throw new Error(`${ROLE} must exist without BYPASSRLS/SUPERUSER`);
-    }
-  } finally {
-    await pool.end();
-  }
-
-  // Same host/db as the owner URL, pooled endpoint for runtime traffic.
-  const appUrl = new URL(ownerUrl!);
-  appUrl.username = ROLE;
-  appUrl.password = password;
-  if (!appUrl.hostname.includes("-pooler.")) {
-    appUrl.hostname = appUrl.hostname.replace(/^([^.]+)\./, "$1-pooler.");
-  }
-
   const envPath = path.join(process.cwd(), ".env.local");
   let env = "";
   try {
     env = await readFile(envPath, "utf8");
   } catch {}
-  const line = `DATABASE_APP_URL="${appUrl.toString()}"`;
-  env = /^DATABASE_APP_URL=.*$/m.test(env)
-    ? env.replace(/^DATABASE_APP_URL=.*$/m, line)
-    : `${env.trimEnd()}\n${line}\n`;
+
+  try {
+    for (const { role, env: key } of ROLES) {
+      if (only && only !== role) continue;
+      const password = randomBytes(24).toString("base64url");
+      // ALTER ROLE can't take bind parameters; base64url passwords contain no quotes.
+      await pool.query(`alter role ${role} with login nobypassrls password '${password}'`);
+      const { rows } = await pool.query<{ rolbypassrls: boolean; rolsuper: boolean }>(
+        "select rolbypassrls, rolsuper from pg_roles where rolname = $1",
+        [role],
+      );
+      if (!rows[0] || rows[0].rolbypassrls || rows[0].rolsuper) throw new Error(`${role} must exist without BYPASSRLS/SUPERUSER`);
+
+      // Same host/db as the owner URL, pooled endpoint for runtime traffic.
+      const url = new URL(ownerUrl!);
+      url.username = role;
+      url.password = password;
+      if (!url.hostname.includes("-pooler.")) url.hostname = url.hostname.replace(/^([^.]+)\./, "$1-pooler.");
+      env = setEnv(env, key, url.toString());
+      console.log(`${role} can log in; ${key} written to .env.local`);
+    }
+  } finally {
+    await pool.end();
+  }
   await writeFile(envPath, env);
-  console.log(`${ROLE} can log in; DATABASE_APP_URL written to .env.local`);
 }
 
 main().catch((err) => {

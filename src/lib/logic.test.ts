@@ -74,3 +74,26 @@ describe("dua keys", async () => {
     assert.equal(parseDuaKey("dua.custom.text"), null);
   });
 });
+
+describe("push reminder schedule", async () => {
+  const { dueEvents } = await import("./push/schedule");
+  const times = {
+    fajr: "2026-10-20T05:23:00+01:00",
+    dhuhr: "2026-10-20T12:31:00+01:00",
+    asr: "2026-10-20T15:52:00+01:00",
+    maghrib: "2026-10-20T18:30:00+01:00",
+    isha: "2026-10-20T19:36:00+01:00",
+  };
+  const all = { prayers: true, adhkar: true };
+  it("fires a prayer when its time arrives", () => assert.deepEqual(dueEvents(times, all, new Date("2026-10-20T15:55:00+01:00")), ["asr"]));
+  it("fires adhkar 15 minutes after Asr", () =>
+    assert.deepEqual(dueEvents(times, all, new Date("2026-10-20T16:08:00+01:00")), ["asr", "adhkar_evening"]));
+  it("does nothing before a prayer or after the window", () => {
+    assert.deepEqual(dueEvents(times, all, new Date("2026-10-20T15:51:00+01:00")), []);
+    assert.deepEqual(dueEvents(times, all, new Date("2026-10-20T16:30:00+01:00")), []);
+  });
+  it("respects preferences", () => {
+    assert.deepEqual(dueEvents(times, { prayers: false, adhkar: true }, new Date("2026-10-20T05:40:00+01:00")), ["adhkar_morning"]);
+    assert.deepEqual(dueEvents(times, { prayers: false, adhkar: false }, new Date("2026-10-20T05:40:00+01:00")), []);
+  });
+});
