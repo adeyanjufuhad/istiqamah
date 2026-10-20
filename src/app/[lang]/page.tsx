@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { DeletedNotice } from "@/components/deleted-notice";
 import { Hero } from "@/components/landing/hero";
 import { LandingNav } from "@/components/landing/landing-nav";
-import { MotionPrefProvider, MotionToggle } from "@/components/landing/motion-pref";
+import { MotionPrefProvider } from "@/components/landing/motion-pref";
 import { Bento, FinalCta, Manifesto, PrayerMarquee, Sources, Steps } from "@/components/landing/sections";
 import { SiteFooter } from "@/components/site-footer";
 import { getDictionary } from "@/i18n/server";
@@ -30,7 +30,6 @@ export default async function Landing() {
           <FinalCta />
         </main>
         <SiteFooter />
-        <MotionToggle />
       </MotionPrefProvider>
     </>
   );

@@ -30,7 +30,6 @@
     "navSignIn": "Sign in",
     "navStart": "Get started",
     "navMenu": "Menu",
-    "eyebrow": "A gentle companion for your deen",
     "headline": "Steadfast, one day at a time.",
     "keepUp": "Keep up with",
     "rotating": [
@@ -106,9 +105,7 @@
     "point3Title": "Private by default",
     "point3Body": "Minimal data, no ads, no public leaderboards. Export or delete anytime.",
     "haveAccount": "I already have an account",
-    "deleted": "Your account and all of your data have been deleted. May Allah make it easy for you.",
-    "pauseMotion": "Pause motion",
-    "playMotion": "Play motion"
+    "deleted": "Your account and all of your data have been deleted. May Allah make it easy for you."
   },
   "auth": {
     "signInTitle": "Assalamu alaykum",

@@ -44,10 +44,6 @@ export function Hero({ rotating }: { rotating: string[] }) {
 
       <div className="mx-auto grid min-h-[100dvh] max-w-6xl grid-cols-1 items-center gap-14 px-4 pb-44 pt-32 md:pb-56 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:gap-8 md:pt-28">
         <div className="flex flex-col items-start gap-7">
-          <span className="max-w-full rounded-full bg-white/70 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-ocean-600 ring-1 ring-navy-950/5 backdrop-blur">
-            {t("landing.eyebrow")}
-          </span>
-
           {reduce ? (
             <h1 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.03em] text-navy-950 md:text-7xl">
               {t("landing.headline")}
