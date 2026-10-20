@@ -4,6 +4,7 @@ import { Button, buttonClass, Card, ScholarNote } from "@/components/ui";
 import { getLocale, getT } from "@/i18n/server";
 import { requireOnboardedUser } from "@/lib/auth/session";
 import { DeleteAccount } from "./delete-account";
+import { Reminders } from "./reminders";
 
 export const instant = false;
 
@@ -11,11 +12,14 @@ export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   const [locale, t] = await Promise.all([getLocale(), getT()]);
-  const { user } = await requireOnboardedUser(locale);
+  const { user, profile } = await requireOnboardedUser(locale);
+  const hasLocation = (profile.latitude !== null && profile.longitude !== null) || !!(profile.city && profile.country);
 
   return (
     <>
       <h1 className="text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+
+      <Reminders hasLocation={hasLocation} />
 
       <Card className="flex flex-col gap-3">
         <h2 className="text-lg font-semibold">{t("settings.profile")}</h2>
