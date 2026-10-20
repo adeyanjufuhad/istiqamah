@@ -377,5 +377,65 @@
     "quran_together": "Let’s read a little Quran today.",
     "begin_again": "Every day is a fresh start. Let’s begin again together.",
     "made_dua": "I made dua for you today."
+  },
+  "daily": {
+    "ayahTitle": "Ayah of the day",
+    "hadithTitle": "Hadith of the day",
+    "duaTitle": "Dua of the day",
+    "ayahRef": "Surah {surah} {surahNumber}:{ayah}",
+    "translation": "Translation: {name}",
+    "readOn": "Read on {site}",
+    "hadithMeta": "{collection} · Hadith {number}",
+    "hadithSource": "Narrated in {source}",
+    "grade": "Grade: {grade}",
+    "duaRef": "Hisn al-Muslim · {chapter} · #{item}",
+    "unavailable": "Couldn’t load this right now. It will be back when you’re online.",
+    "showArabic": "Show Arabic",
+    "loading": "Loading…"
+  },
+  "push": {
+    "fajr": {
+      "title": "Fajr",
+      "body": "The time for Fajr has begun."
+    },
+    "dhuhr": {
+      "title": "Dhuhr",
+      "body": "The time for Dhuhr has begun."
+    },
+    "asr": {
+      "title": "Asr",
+      "body": "The time for Asr has begun."
+    },
+    "maghrib": {
+      "title": "Maghrib",
+      "body": "The time for Maghrib has begun."
+    },
+    "isha": {
+      "title": "Isha",
+      "body": "The time for Isha has begun."
+    },
+    "adhkar_morning": {
+      "title": "Morning adhkar",
+      "body": "A few quiet minutes of remembrance to begin your day."
+    },
+    "adhkar_evening": {
+      "title": "Evening adhkar",
+      "body": "A few quiet minutes of remembrance before the evening."
+    }
+  },
+  "reminders": {
+    "title": "Reminders",
+    "intro": "Optional notifications when each prayer time begins, and gentle nudges for morning and evening adhkar.",
+    "enable": "Turn on reminders",
+    "enabling": "Turning on…",
+    "disable": "Turn off reminders",
+    "prayers": "Prayer times",
+    "adhkar": "Morning & evening adhkar",
+    "on": "Reminders are on for this device.",
+    "denied": "Notifications are blocked for this site. Allow them in your browser settings, then try again.",
+    "unsupported": "This browser can’t receive reminders. On iPhone, add Istiqamah to your Home Screen first, then open it from there.",
+    "needsLocation": "Reminders need your location to know prayer times.",
+    "devOnly": "Reminders are available in the installed app (production build).",
+    "error": "Couldn’t update reminders. Check your connection and try again."
   }
 }

@@ -12,7 +12,7 @@ export { duaKey, ENCOURAGEMENT_DUAS, parseDuaKey, type HisnDua, type HisnRef } f
 
 type ChapterJson = Record<string, { ID: number; ARABIC_TEXT: string; TRANSLATED_TEXT: string }[]>;
 
-async function fetchChapter(chapter: number) {
+export async function fetchChapter(chapter: number) {
   "use cache";
   cacheLife("weeks");
   cacheTag("hisn");

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
+import { AyahCard, DailySkeleton, DuaCard, HadithCard } from "@/components/daily/daily-cards";
 import { getLocale, getT } from "@/i18n/server";
 import { requireOnboardedUser } from "@/lib/auth/session";
 import { formatDate, localDate } from "@/lib/dates";
@@ -71,6 +73,10 @@ export default async function TodayPage() {
         {prayerDay && <p className="text-xs text-muted">{t("today.methodNote", { method: prayerDay.methodName })}</p>}
       </header>
 
+      <Suspense fallback={<DailySkeleton label={t("daily.loading")} />}>
+        <AyahCard date={today} />
+      </Suspense>
+
       <TodayTracker
         date={today}
         habits={habits}
@@ -81,6 +87,15 @@ export default async function TodayPage() {
         fastingHints={fastingHints(today, prayerDay?.hijri ?? null)}
         prayerNotice={prayerNotice}
       />
+
+      <div className="flex flex-col gap-4">
+        <Suspense fallback={<DailySkeleton label={t("daily.loading")} />}>
+          <HadithCard date={today} />
+        </Suspense>
+        <Suspense fallback={<DailySkeleton label={t("daily.loading")} />}>
+          <DuaCard date={today} />
+        </Suspense>
+      </div>
     </>
   );
 }
