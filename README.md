@@ -23,7 +23,7 @@ In the Neon Console (Auth → Configuration) enable **Magic Link**. Google sign-
 
 ```
 db/migrations/        SQL migrations: schema, helper functions, RLS policies, grants (source of truth)
-scripts/              migrate, setup-app-role, test-rls
+scripts/              migrate, setup-app-role, test-rls, check-content
 src/proxy.ts          locale redirect + route protection
 src/app/[lang]/       all pages (root layout lives here; `lang` is a root param)
   (app)/              signed-in area: today, week, circles, settings
